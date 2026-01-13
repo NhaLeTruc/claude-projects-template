@@ -1,0 +1,31 @@
+{
+  "detectiveOptions": {
+    "ts": {
+      "skipTypeImports": true,
+      "skipAsyncImports": false
+    }
+  },
+  "fileExtensions": ["ts", "tsx", "js", "jsx"],
+  "tsConfig": "./tsconfig.json",
+  "excludeRegExp": [
+    "^node_modules/",
+    "^dist/",
+    "^coverage/",
+    "^build/",
+    "\\.test\\.(ts|js)$",
+    "\\.spec\\.(ts|js)$",
+    "\\.mock\\.(ts|js)$"
+  ],
+  "backgroundColor": "#000000",
+  "nodeColor": "#c6c5fe",
+  "noDependencyColor": "#cfffac",
+  "cyclicNodeColor": "#ff6c60",
+  "edgeColor": "#757575",
+  "graphVizOptions": {
+    "G": {
+      "rankdir": "LR",
+      "concentrate": "true",
+      "splines": "ortho"
+    }
+  }
+}
