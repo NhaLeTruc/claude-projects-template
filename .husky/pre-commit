@@ -1,0 +1,80 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+echo ""
+
+FAILED=0
+
+# 1. Detect languages in the project
+echo "🌐 Detecting project languages..."
+LANGUAGES=$(node scripts/hooks/detect-languages.js)
+
+# 2. Run linting based on detected languages
+echo ""
+echo "📝 Linting code..."
+
+if echo "$LANGUAGES" | grep -q "typescript"; then
+    npm run lint || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "python"; then
+    npm run lint:python || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "java"; then
+    npm run lint:java || FAILED=1
+fi
+
+# 3. Run tests
+echo ""
+echo "🧪 Running tests..."
+
+if echo "$LANGUAGES" | grep -q "typescript"; then
+    npm run test || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "python"; then
+    npm run test:python || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "java"; then
+    npm run test:java || FAILED=1
+fi
+
+# 4. Check file sizes
+echo ""
+echo "📏 Checking file sizes..."
+node scripts/hooks/check-file-size.js || FAILED=1
+
+# 5. Check documentation location
+echo ""
+echo "📚 Checking documentation location..."
+node scripts/hooks/check-documentation.js || FAILED=1
+
+# 6. Scan for secrets
+echo ""
+echo "🔐 Scanning for secrets..."
+npm run check:secrets || FAILED=1
+
+# 7. Check formatting
+echo ""
+echo "💅 Checking code formatting..."
+
+if echo "$LANGUAGES" | grep -q "typescript"; then
+    npm run format:check || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "python"; then
+    black --check . || FAILED=1
+fi
+
+if [ $FAILED -ne 0 ]; then
+    echo ""
+    echo "❌ Pre-commit checks failed!"
+    echo "Fix errors above or use --no-verify to skip (not recommended)"
+    exit 1
+fi
+
+echo ""
+echo "✅ All pre-commit checks passed!"

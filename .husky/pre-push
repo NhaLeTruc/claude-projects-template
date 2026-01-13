@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push checks..."
+echo ""
+
+FAILED=0
+
+# 1. Check for circular dependencies
+echo "🔄 Checking for circular dependencies..."
+npm run check:deps || FAILED=1
+
+# 2. Run full test coverage
+echo ""
+echo "📊 Running tests with coverage..."
+npm run test:coverage || FAILED=1
+
+# 3. Build check
+echo ""
+echo "🏗️  Building project..."
+npm run build || FAILED=1
+
+# 4. Optional: Deep secret scan (set DEEP_SCAN_ENABLED=true in env)
+if [ "$DEEP_SCAN_ENABLED" = "true" ]; then
+    echo ""
+    echo "🔍 Running deep secret scan..."
+    npm run check:secrets:deep || FAILED=1
+fi
+
+if [ $FAILED -ne 0 ]; then
+    echo ""
+    echo "❌ Pre-push checks failed!"
+    exit 1
+fi
+
+echo ""
+echo "✅ All pre-push checks passed!"
