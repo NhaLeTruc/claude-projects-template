@@ -5,7 +5,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const MAX_LINES = 500;
-const EXCEPTIONS_FILE = '.filesize-exceptions';
+const EXCEPTIONS_FILE = '.config/security/filesize-exceptions.txt';
 const EXCLUDE_PATTERNS = ['node_modules', 'dist', 'coverage', 'build', '.git', '__pycache__'];
 
 // ANSI color codes

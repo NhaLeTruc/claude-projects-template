@@ -63,6 +63,27 @@ npm run check:all
 │       ├── fix-violations.md
 │       └── check-secrets.md
 │
+├── .config/                # All configuration files
+│   ├── README.md           # Configuration documentation
+│   ├── typescript/         # TypeScript/JavaScript configs
+│   │   ├── tsconfig.json
+│   │   ├── eslint.config.js
+│   │   ├── prettier.config.json
+│   │   ├── jest.config.js
+│   │   └── madge.config.json
+│   ├── python/             # Python configs
+│   │   ├── pylintrc
+│   │   ├── pyproject.toml
+│   │   └── requirements-dev.txt
+│   ├── java/               # Java configs
+│   │   └── checkstyle.xml
+│   ├── git/                # Git configs
+│   │   └── commitlint.config.js
+│   └── security/           # Security configs
+│       ├── gitleaks.toml
+│       ├── trufflehog.yaml
+│       └── filesize-exceptions.txt
+│
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml          # Main CI pipeline
@@ -94,19 +115,7 @@ npm run check:all
 ├── src/                    # Source code (create as needed)
 ├── tests/                  # Tests (create as needed)
 │
-├── .eslintrc.js            # ESLint configuration
-├── .prettierrc.json        # Prettier configuration
-├── .editorconfig           # Editor configuration
-├── commitlint.config.js    # Commit message linting
-├── .gitleaks.toml          # Secret scanning (Gitleaks)
-├── .trufflehog.yaml        # Secret scanning (TruffleHog)
-├── .madgerc                # Circular dependency detection
-├── .filesize-exceptions    # File size exceptions
-├── .pylintrc               # Python linting
-├── pyproject.toml          # Python configuration
-├── checkstyle.xml          # Java linting
-├── tsconfig.json           # TypeScript configuration
-├── jest.config.js          # Jest testing configuration
+├── .editorconfig           # Editor configuration (must be in root)
 ├── package.json            # Node.js dependencies and scripts
 └── README.md               # This file
 ```

@@ -3,7 +3,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: './.config/typescript/tsconfig.json',
   },
   extends: [
     'eslint:recommended',
@@ -83,7 +83,7 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
-        project: './tsconfig.json',
+        project: './.config/typescript/tsconfig.json',
       },
     },
   },

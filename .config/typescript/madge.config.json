@@ -6,7 +6,7 @@
     }
   },
   "fileExtensions": ["ts", "tsx", "js", "jsx"],
-  "tsConfig": "./tsconfig.json",
+  "tsConfig": "./.config/typescript/tsconfig.json",
   "excludeRegExp": [
     "^node_modules/",
     "^dist/",

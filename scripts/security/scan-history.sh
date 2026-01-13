@@ -12,7 +12,7 @@ if ! command -v trufflehog &> /dev/null; then
 fi
 
 # Run TruffleHog on entire git history
-trufflehog git file://. --since-commit="" --only-verified --json > trufflehog-results.json
+trufflehog git file://. --config .config/security/trufflehog.yaml --since-commit="" --only-verified --json > trufflehog-results.json
 
 if [ $? -eq 0 ]; then
     echo "✅ Deep scan complete"
