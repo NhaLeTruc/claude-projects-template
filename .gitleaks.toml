@@ -1,0 +1,131 @@
+title = "Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[[rules]]
+description = "AWS Access Key"
+id = "aws-access-key"
+regex = '''(?i)(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'''
+tags = ["aws", "secret", "key"]
+
+[[rules]]
+description = "AWS Secret Key"
+id = "aws-secret-key"
+regex = '''(?i)aws(.{0,20})?['\"][0-9a-zA-Z\/+]{40}['\"]'''
+tags = ["aws", "secret"]
+
+[[rules]]
+description = "GitHub Personal Access Token"
+id = "github-pat"
+regex = '''ghp_[0-9a-zA-Z]{36}'''
+tags = ["github", "token"]
+
+[[rules]]
+description = "GitHub OAuth Token"
+id = "github-oauth"
+regex = '''gho_[0-9a-zA-Z]{36}'''
+tags = ["github", "token"]
+
+[[rules]]
+description = "GitHub App Token"
+id = "github-app-token"
+regex = '''(ghu|ghs)_[0-9a-zA-Z]{36}'''
+tags = ["github", "token"]
+
+[[rules]]
+description = "GitHub Refresh Token"
+id = "github-refresh-token"
+regex = '''ghr_[0-9a-zA-Z]{76}'''
+tags = ["github", "token"]
+
+[[rules]]
+description = "Generic API Key"
+id = "generic-api-key"
+regex = '''(?i)(api[_-]?key|apikey|api[_-]?token)['\"]?\s*[:=]\s*['\"]?[0-9a-zA-Z\-_]{20,}['\"]?'''
+tags = ["api", "secret", "key"]
+
+[[rules]]
+description = "Generic Secret"
+id = "generic-secret"
+regex = '''(?i)(secret|password|passwd|pwd)['\"]?\s*[:=]\s*['\"]?[0-9a-zA-Z\-_!@#$%^&*()+=]{12,}['\"]?'''
+tags = ["secret", "password"]
+
+[[rules]]
+description = "Private Key"
+id = "private-key"
+regex = '''-----BEGIN (RSA|DSA|EC|OPENSSH|PGP) PRIVATE KEY-----'''
+tags = ["key", "private"]
+
+[[rules]]
+description = "Slack Token"
+id = "slack-token"
+regex = '''xox[baprs]-([0-9a-zA-Z]{10,48})'''
+tags = ["slack", "token"]
+
+[[rules]]
+description = "Slack Webhook"
+id = "slack-webhook"
+regex = '''https://hooks\.slack\.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}'''
+tags = ["slack", "webhook"]
+
+[[rules]]
+description = "Google API Key"
+id = "google-api-key"
+regex = '''AIza[0-9A-Za-z\\-_]{35}'''
+tags = ["google", "api", "key"]
+
+[[rules]]
+description = "Google OAuth"
+id = "google-oauth"
+regex = '''[0-9]+-[0-9A-Za-z_]{32}\.apps\.googleusercontent\.com'''
+tags = ["google", "oauth"]
+
+[[rules]]
+description = "Heroku API Key"
+id = "heroku-api-key"
+regex = '''(?i)heroku(.{0,20})?['\"][0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}['\"]'''
+tags = ["heroku", "api", "key"]
+
+[[rules]]
+description = "Stripe API Key"
+id = "stripe-api-key"
+regex = '''(?i)(sk|pk)_(test|live)_[0-9a-zA-Z]{24,}'''
+tags = ["stripe", "api", "key"]
+
+[[rules]]
+description = "Twilio API Key"
+id = "twilio-api-key"
+regex = '''SK[0-9a-fA-F]{32}'''
+tags = ["twilio", "api", "key"]
+
+[allowlist]
+description = "Allowlisted files and patterns"
+files = [
+  '''.gitleaks.toml''',
+  '''package-lock.json''',
+  '''yarn.lock''',
+  '''pnpm-lock.yaml''',
+  '''.*\.example$''',
+  '''.*\.sample$''',
+  '''.*\.template$''',
+  '''.*\.md$''',
+  '''.*\.test\.ts$''',
+  '''.*\.spec\.ts$''',
+]
+
+regexes = [
+  '''test[_-]?key''',
+  '''fake[_-]?api[_-]?key''',
+  '''example[_-]?token''',
+  '''dummy[_-]?secret''',
+  '''mock[_-]?password''',
+  '''0{20,}''',  # All zeros
+  '''1{20,}''',  # All ones
+]
+
+paths = [
+  '''tests/fixtures/''',
+  '''examples/''',
+  '''docs/''',
+]

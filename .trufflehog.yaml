@@ -1,0 +1,25 @@
+# TruffleHog configuration for deep historical scans
+
+# Enable verified findings only (reduces false positives)
+only-verified: true
+
+# Scan entire git history
+since-commit: ""
+
+# JSON output format
+json: true
+
+# Exclude patterns
+exclude:
+  - path: ".*\\.example$"
+  - path: ".*\\.sample$"
+  - path: ".*\\.md$"
+  - path: "node_modules/"
+  - path: "dist/"
+  - path: "coverage/"
+  - path: "tests/fixtures/"
+
+# Custom detectors (optional)
+detectors:
+  - name: "custom-api-key"
+    regex: "custom_api_[0-9a-zA-Z]{32}"
