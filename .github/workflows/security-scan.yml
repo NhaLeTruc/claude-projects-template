@@ -1,0 +1,46 @@
+name: Weekly Security Scan
+
+on:
+  schedule:
+    # Run every Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  trufflehog-scan:
+    name: TruffleHog Deep Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history
+
+      - name: Install TruffleHog
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Run TruffleHog scan
+        run: |
+          trufflehog git file://. --since-commit="" --only-verified --json > trufflehog-weekly.json
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-security-scan
+          path: trufflehog-weekly.json
+          retention-days: 90
+
+      - name: Notify on findings
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔐 Security Alert: Secrets Detected in Repository History',
+              body: 'TruffleHog detected potential secrets in the repository history. Please review the scan results and take appropriate action.',
+              labels: ['security', 'urgent']
+            })
