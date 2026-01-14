@@ -1,0 +1,250 @@
+# =============================================================================
+# Dependencies
+# =============================================================================
+
+# Node.js / TypeScript
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+pip-wheel-metadata/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+share/python-wheels/
+
+# Java
+.m2/
+.gradle/
+gradle/
+
+# =============================================================================
+# Build Outputs
+# =============================================================================
+
+# Node.js / TypeScript
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Python
+build/
+develop-eggs/
+dist/
+downloads/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.manifest
+*.spec
+
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+bin/
+
+# =============================================================================
+# IDE and Editor
+# =============================================================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains (IntelliJ, PyCharm, WebStorm)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+*.launch
+
+# Vim
+*.swp
+*.swo
+*.swn
+*~
+
+# Emacs
+*~
+\#*\#
+.#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# Environment and Secrets
+# =============================================================================
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+*.env
+
+# Secrets
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+.secrets/
+secrets/
+
+# =============================================================================
+# Testing and Coverage
+# =============================================================================
+
+# Node.js / TypeScript
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+
+# Python
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Java
+*.exec
+jacoco.exec
+test-results/
+surefire-reports/
+
+# =============================================================================
+# Logs and Temporary Files
+# =============================================================================
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# =============================================================================
+# Language Specific
+# =============================================================================
+
+# TypeScript
+*.js.map
+*.d.ts.map
+
+# Python
+*.so
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+.pyre/
+Pipfile.lock
+poetry.lock
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Java
+hs_err_pid*
+replay_pid*
+.factorypath
+
+# =============================================================================
+# Package Managers Lock Files (optional - uncomment if needed)
+# =============================================================================
+
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# =============================================================================
+# Miscellaneous
+# =============================================================================
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache
+.cache/
+*.cache
+
+# Scala (if using with Java)
+.bsp/
+.metals/
+project/metals.sbt
+project/project/
