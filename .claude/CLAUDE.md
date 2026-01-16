@@ -151,6 +151,23 @@ class UserService {
 }
 ```
 
+#### Dependency Management
+
+**Python Projects**:
+- Use `deptry` to detect unused, missing, and transitive dependencies
+- Use `pydeps` to visualize dependency graphs
+- Run `npm run check:deps:python:full` before major refactors
+
+**Example**: Clean up dependencies
+```bash
+# Find unused dependencies
+npm run check:deps:python:full
+
+# Remove unused package
+pip uninstall unused-package
+# Update requirements-dev.txt or pyproject.toml
+```
+
 ### 6. Testing
 
 **Requirements**:

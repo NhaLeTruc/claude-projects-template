@@ -58,6 +58,8 @@ This document provides a complete implementation plan for creating a production-
 | **TruffleHog** | Deep historical scanning | Entropy analysis, comprehensive historical git scans, ideal for CI/CD |
 | **git-filter-repo** | Secret cleanup | Emergency removal of secrets from git history |
 | **Madge** | Circular dependency detection | Visual dependency graphs, CI-friendly exit codes, TypeScript-aware |
+| **deptry** | Python dependency health | Detects unused/missing/transitive dependencies, PEP 621 support |
+| **pydeps** | Python dependency visualization | Graphviz integration, circular detection |
 | **ESLint + plugins** | TypeScript linting | Cognitive complexity, SOLID enforcement, import organization |
 | **Prettier** | Code formatting | Zero-config, consistent formatting across team |
 
@@ -84,12 +86,19 @@ This document provides a complete implementation plan for creating a production-
 #### Python (Auto-detected when .py files present)
 
 ```txt
-# requirements-dev.txt
+# .config/python/requirements-dev.txt
 pylint>=3.0.0
+mypy>=1.7.0
+flake8>=7.0.0
 black>=23.0.0
+isort>=5.13.0
 pytest>=7.4.0
 pytest-cov>=4.1.0
-mypy>=1.7.0
+radon>=6.0.0
+mccabe>=0.7.0
+pydeps>=1.12.0
+graphviz>=0.20.0
+deptry>=0.16.0
 ```
 
 #### Java (Auto-detected when .java files present)
@@ -155,6 +164,9 @@ mypy>=1.7.0
     "test:java": "mvn test",
 
     "check:deps": "madge --circular --ts-config ./tsconfig.json --extensions ts src/",
+    "check:deps:python": "node scripts/hooks/check-circular-python.js",
+    "check:deps:python:full": "deptry . --config .config/python/pyproject.toml",
+    "check:deps:python:graph": "pydeps --cluster --max-bacon 10 -o dependency-graph-python.svg src/",
     "check:secrets": "gitleaks detect --source . --verbose",
     "check:secrets:deep": "bash scripts/security/scan-history.sh",
     "check:file-size": "node scripts/hooks/check-file-size.js",
@@ -1248,7 +1260,18 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 ignore_missing_imports = true
+
+[tool.deptry]
+exclude = ["tests", "__pycache__", "venv", ".venv", "dist", "build"]
+pep621_dev_dependency_groups = ["dev", "test", "docs"]
+extend_exclude = ["examples/.*", "scripts/.*"]
 ```
+
+**deptry** checks:
+- DEP001: Missing dependencies (imported but not declared)
+- DEP002: Unused dependencies (declared but not imported)
+- DEP003: Transitive dependencies (used but not directly declared)
+- DEP004: Misplaced dev dependencies (dev deps used in source)
 
 ### checkstyle.xml (Java)
 

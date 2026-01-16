@@ -132,14 +132,19 @@ This installs:
 #### Python Dependencies (if applicable)
 
 ```bash
-pip install -r requirements-dev.txt
+pip install -r .config/python/requirements-dev.txt
 ```
 
 This installs:
 - pylint (Linting)
-- black (Code formatting)
-- pytest (Testing framework)
 - mypy (Type checking)
+- black (Code formatting)
+- isort (Import sorting)
+- pytest + pytest-cov (Testing framework with coverage)
+- radon (Cognitive complexity analysis)
+- pydeps (Dependency visualization)
+- deptry (Dependency health checking)
+- graphviz (Required by pydeps)
 
 #### Java Dependencies (if applicable)
 
@@ -255,6 +260,22 @@ npm run test:python
 
 # Java (if applicable)
 npm run test:java
+```
+
+### Verify Dependency Checking
+
+```bash
+# TypeScript
+npm run check:deps
+
+# Python - Circular dependencies (if applicable)
+npm run check:deps:python
+
+# Python - Full dependency health (if applicable)
+npm run check:deps:python:full
+
+# Python - Generate visualization (if applicable)
+npm run check:deps:python:graph
 ```
 
 ### Verify Secret Scanning

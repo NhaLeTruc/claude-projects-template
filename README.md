@@ -149,7 +149,8 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`
 ### Pre-push (Automatic)
 
 Runs before pushing to remote:
-- ✅ Circular dependency check
+- ✅ Circular dependency check (Madge/pydeps)
+- ✅ Full dependency health check (unused/missing/transitive - deptry for Python)
 - ✅ Full test coverage (80% minimum)
 - ✅ Build verification
 - ✅ Optional: Deep secret scan (TruffleHog)
@@ -210,7 +211,10 @@ npm run check:file-size
 npm run check:docs
 
 # Check circular dependencies
-npm run check:deps
+npm run check:deps                      # TypeScript (Madge)
+npm run check:deps:python               # Python circular (pydeps)
+npm run check:deps:python:full          # Python full check (deptry)
+npm run check:deps:python:graph         # Python visualization (pydeps)
 
 # Detect languages
 npm run check:languages
@@ -303,9 +307,11 @@ Comprehensive documentation is available in the `docs/` directory:
 ### Python
 
 - **Linting**: pylint
-- **Formatting**: Black
-- **Testing**: pytest with coverage
+- **Formatting**: Black + isort
+- **Testing**: pytest with coverage (80% minimum)
 - **Type Checking**: mypy
+- **Complexity**: radon (cognitive complexity)
+- **Dependencies**: deptry (unused/missing/transitive) + pydeps (circular/visualization)
 
 ### Java
 
@@ -408,6 +414,8 @@ Built with:
 - [Gitleaks](https://github.com/gitleaks/gitleaks) - Secret detection
 - [TruffleHog](https://github.com/trufflesecurity/trufflehog) - Deep secret scanning
 - [Madge](https://github.com/pahen/madge) - Circular dependency detection
+- [pydeps](https://github.com/thebjorn/pydeps) - Python dependency visualization
+- [deptry](https://github.com/fpgmaas/deptry) - Python dependency health checking
 
 ---
 

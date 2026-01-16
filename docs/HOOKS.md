@@ -337,18 +337,41 @@ If you try to bypass with `--no-verify`, the hook won't run and you might commit
 
 ### Checks Performed
 
-#### 1. Circular Dependency Check
-Uses Madge to detect circular dependencies in the codebase.
+#### 1. Dependency Health Checks
+Runs comprehensive dependency analysis to ensure codebase health.
 
+**TypeScript**: Uses Madge for circular dependency detection
 ```bash
 npm run check:deps
 ```
 
-**Why**: Circular dependencies create tight coupling and make code hard to test.
+**Python**: Uses two complementary tools:
+
+1. **Circular dependencies** (pydeps):
+```bash
+npm run check:deps:python
+```
+
+2. **Full dependency health** (deptry):
+```bash
+npm run check:deps:python:full
+```
+Checks for:
+- Missing dependencies (DEP001)
+- Unused dependencies (DEP002)
+- Transitive dependencies (DEP003)
+- Misplaced dev dependencies (DEP004)
+
+**Why**:
+- Circular dependencies create tight coupling
+- Unused dependencies bloat installation size and attack surface
+- Missing dependencies cause runtime errors
+- Transitive dependencies should be explicitly declared
 
 **Example output**:
 ```bash
-✓ No circular dependencies found
+✓ No circular dependencies found (pydeps)
+✓ No dependency issues found (deptry)
 ```
 
 or
@@ -356,6 +379,10 @@ or
 ```bash
 ❌ Circular dependency detected:
   src/services/user.service.ts → src/repositories/user.repository.ts → src/services/user.service.ts
+
+❌ Dependency issues found:
+  DEP002: 'requests' defined as a dependency but not used
+  DEP001: 'click' imported but not defined in dependencies
 ```
 
 #### 2. Full Test Coverage
@@ -575,6 +602,42 @@ src/legacy/large-file.ts
    - Invert dependencies
 
 See [.claude/architecture_decisions.md](../.claude/architecture_decisions.md) for patterns.
+
+### Python Dependency Issues
+
+**Symptoms**: Pre-push hook fails with deptry errors
+
+**Solution**:
+
+1. **View detailed report**:
+   ```bash
+   deptry . --config .config/python/pyproject.toml
+   ```
+
+2. **For unused dependencies (DEP002)**:
+   ```bash
+   pip uninstall package-name
+   # Remove from requirements.txt or pyproject.toml
+   ```
+
+3. **For missing dependencies (DEP001)**:
+   ```bash
+   pip install package-name
+   echo "package-name>=1.0.0" >> requirements.txt
+   ```
+
+4. **For false positives**, edit `.config/python/pyproject.toml`:
+   ```toml
+   [tool.deptry]
+   ignore_obsolete = ["package-name"]  # For DEP002
+   ignore_missing = ["package-name"]   # For DEP001
+   ```
+
+5. **Visualize dependencies**:
+   ```bash
+   npm run check:deps:python:graph
+   open dependency-graph-python.svg
+   ```
 
 ## Hook Modification
 
