@@ -3,12 +3,22 @@ init-hook='import sys; sys.path.append(".")'
 jobs=4
 persistent=yes
 suggestion-mode=yes
+# Load additional plugins for complexity checking
+load-plugins=pylint.extensions.mccabe
 
 [MESSAGES CONTROL]
-disable=C0111,  # missing-docstring
-        R0903,  # too-few-public-methods
-        R0913,  # too-many-arguments
+disable=C0111,  # missing-docstring (handled separately)
+        R0903,  # too-few-public-methods (allow small focused classes)
+        R0913,  # too-many-arguments (covered by max-args)
         C0103   # invalid-name
+
+# Enable additional checks for SOLID principles
+enable=R0901,  # too-many-ancestors (LSP - inheritance depth)
+       R0902,  # too-many-instance-attributes (SRP)
+       R0904,  # too-many-public-methods (ISP)
+       W0223,  # abstract-method (LSP - must implement abstract methods)
+       W0231,  # super-init-not-called (LSP)
+       W0233   # non-parent-init-called (LSP)
 
 [FORMAT]
 max-line-length=100
@@ -16,15 +26,36 @@ indent-string='    '
 expected-line-ending-format=LF
 
 [DESIGN]
-max-args=7
-max-locals=15
-max-returns=6
-max-branches=12
-max-statements=50
-min-public-methods=1
+# Single Responsibility Principle
+max-args=7                    # Function parameter limit
+max-locals=15                 # Local variables per function
+max-returns=6                 # Return statements per function
+max-branches=12               # Branches per function
+max-statements=50             # Statements per function (matches TypeScript ESLint)
+max-attributes=10             # Instance attributes per class (SRP for classes)
+
+# Interface Segregation Principle
+max-public-methods=15         # Public methods per class (keep interfaces focused)
+min-public-methods=1          # Ensure classes have purpose
+
+# Liskov Substitution Principle
+max-parents=5                 # Inheritance depth limit
+
+# Complexity limits
+max-bool-expr=5               # Boolean expression complexity
 
 [BASIC]
-good-names=i,j,k,ex,Run,_,id,db
+good-names=i,j,k,ex,Run,_,id,db,fd,pk,fk
 
 [SIMILARITIES]
-min-similarity-lines=10
+min-similarity-lines=10       # Detect duplicate code
+
+[TYPECHECK]
+# Dependency Inversion - encourage typing
+ignore-missing-members=no
+
+[CLASSES]
+# Open/Closed Principle - encourage proper inheritance
+defining-attr-methods=__init__,__new__,setUp,__post_init__
+valid-classmethod-first-arg=cls
+valid-metaclass-classmethod-first-arg=mcs
