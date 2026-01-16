@@ -16,7 +16,8 @@
     "format:check": "prettier --config .config/typescript/prettier.config.json --check \"src/**/*.ts\"",
     "format:python": "black . && isort .",
     "format:python:check": "black --check . && isort --check-only .",
-    "format:java": "java -jar google-java-format.jar --replace $(find . -name '*.java')",
+    "format:java": "mvn -f .config/java/pom.xml fmt:format",
+    "format:java:check": "mvn -f .config/java/pom.xml fmt:check",
 
     "test": "jest --config .config/typescript/jest.config.js",
     "test:coverage": "jest --config .config/typescript/jest.config.js --coverage",
@@ -28,6 +29,7 @@
     "typecheck:python": "mypy . --config-file .config/python/pyproject.toml",
 
     "check:complexity:python": "radon cc . -a -nc --exclude 'venv/*,.venv/*,tests/*' --total-average",
+    "check:complexity:java": "mvn -f .config/java/pom.xml pmd:check",
 
     "check:deps": "madge --config .config/typescript/madge.config.json --circular --ts-config .config/typescript/tsconfig.json --extensions ts src/",
     "check:deps:python": "node scripts/hooks/check-circular-python.js",
@@ -43,7 +45,7 @@
 
     "check:all": "npm run check:languages && npm run lint && npm run format:check && npm run test && npm run check:deps && npm run check:file-size && npm run check:docs && npm run check:secrets",
     "check:all:python": "npm run lint:python && npm run typecheck:python && npm run check:complexity:python && npm run format:python:check && npm run test:coverage:python && npm run check:deps:python:full",
-    "check:all:java": "npm run lint:java && npm run test:coverage:java && npm run check:deps:java",
+    "check:all:java": "npm run lint:java && npm run check:complexity:java && npm run format:java:check && npm run test:coverage:java && npm run check:deps:java",
 
     "build": "tsc -p .config/typescript/tsconfig.json",
     "build:python": "python setup.py build",

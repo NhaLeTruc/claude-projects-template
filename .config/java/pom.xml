@@ -23,6 +23,8 @@
         <archunit.version>1.2.1</archunit.version>
         <checkstyle.version>10.12.5</checkstyle.version>
         <jacoco.version>0.8.11</jacoco.version>
+        <pmd.version>3.21.0</pmd.version>
+        <fmt.version>2.23</fmt.version>
     </properties>
 
     <dependencies>
@@ -92,6 +94,35 @@
                         <include>**/*Test.java</include>
                         <include>**/*ArchitectureTest.java</include>
                     </includes>
+                </configuration>
+            </plugin>
+
+            <!-- Spotless with google-java-format for code formatting -->
+            <!-- Replaces standalone google-java-format.jar dependency -->
+            <plugin>
+                <groupId>com.spotify.fmt</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>${fmt.version}</version>
+                <configuration>
+                    <style>google</style>
+                    <sourceDirectory>../../src/main/java</sourceDirectory>
+                    <testSourceDirectory>../../tests/java</testSourceDirectory>
+                </configuration>
+            </plugin>
+
+            <!-- PMD for cognitive complexity check -->
+            <!-- Matches TypeScript sonarjs/cognitive-complexity and Python radon -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.version}</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>pmd-rules.xml</ruleset>
+                    </rulesets>
+                    <failOnViolation>true</failOnViolation>
+                    <printFailingErrors>true</printFailingErrors>
+                    <linkXRef>false</linkXRef>
                 </configuration>
             </plugin>
 
