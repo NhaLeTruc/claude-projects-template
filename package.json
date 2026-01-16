@@ -6,28 +6,48 @@
   "scripts": {
     "prepare": "husky install",
     "commit": "cz",
+
     "lint": "eslint -c .config/typescript/eslint.config.js src --ext .ts",
     "lint:fix": "eslint -c .config/typescript/eslint.config.js src --ext .ts --fix",
     "lint:python": "pylint --rcfile=.config/python/pylintrc **/*.py",
-    "lint:java": "java -jar checkstyle.jar -c .config/java/checkstyle.xml src/",
+    "lint:java": "mvn -f .config/java/pom.xml checkstyle:check",
+
     "format": "prettier --config .config/typescript/prettier.config.json --write \"src/**/*.ts\"",
     "format:check": "prettier --config .config/typescript/prettier.config.json --check \"src/**/*.ts\"",
-    "format:python": "black -c .config/python/pyproject.toml .",
+    "format:python": "black . && isort .",
+    "format:python:check": "black --check . && isort --check-only .",
     "format:java": "java -jar google-java-format.jar --replace $(find . -name '*.java')",
+
     "test": "jest --config .config/typescript/jest.config.js",
     "test:coverage": "jest --config .config/typescript/jest.config.js --coverage",
-    "test:python": "pytest --cov",
-    "test:java": "mvn test",
+    "test:python": "pytest",
+    "test:coverage:python": "pytest --cov --cov-fail-under=80",
+    "test:java": "mvn -f .config/java/pom.xml test",
+    "test:coverage:java": "mvn -f .config/java/pom.xml verify",
+
+    "typecheck:python": "mypy . --config-file .config/python/pyproject.toml",
+
+    "check:complexity:python": "radon cc . -a -nc --exclude 'venv/*,.venv/*,tests/*' --total-average",
+
     "check:deps": "madge --config .config/typescript/madge.config.json --circular --ts-config .config/typescript/tsconfig.json --extensions ts src/",
+    "check:deps:python": "node scripts/hooks/check-circular-python.js",
+    "check:deps:python:full": "deptry . --config .config/python/pyproject.toml",
+    "check:deps:python:graph": "pydeps --cluster --max-bacon 10 -o dependency-graph-python.svg src/",
+    "check:deps:java": "mvn -f .config/java/pom.xml test -Dtest=ArchitectureTest",
+
     "check:secrets": "gitleaks detect --config .config/security/gitleaks.toml --source . --verbose",
     "check:secrets:deep": "bash scripts/security/scan-history.sh",
     "check:file-size": "node scripts/hooks/check-file-size.js",
     "check:docs": "node scripts/hooks/check-documentation.js",
     "check:languages": "node scripts/hooks/detect-languages.js",
+
     "check:all": "npm run check:languages && npm run lint && npm run format:check && npm run test && npm run check:deps && npm run check:file-size && npm run check:docs && npm run check:secrets",
+    "check:all:python": "npm run lint:python && npm run typecheck:python && npm run check:complexity:python && npm run format:python:check && npm run test:coverage:python && npm run check:deps:python:full",
+    "check:all:java": "npm run lint:java && npm run test:coverage:java && npm run check:deps:java",
+
     "build": "tsc -p .config/typescript/tsconfig.json",
     "build:python": "python setup.py build",
-    "build:java": "mvn compile"
+    "build:java": "mvn -f .config/java/pom.xml compile"
   },
   "devDependencies": {
     "husky": "^9.0.0",
