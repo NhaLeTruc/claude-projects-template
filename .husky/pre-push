@@ -1,37 +1,82 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🚀 Running pre-push checks..."
+echo "Running pre-push checks..."
 echo ""
 
 FAILED=0
 
-# 1. Check for circular dependencies
-echo "🔄 Checking for circular dependencies..."
-npm run check:deps || FAILED=1
+# 0. Detect languages
+LANGUAGES=$(node scripts/hooks/detect-languages.js)
+
+# 1. Check for circular dependencies (SOLID: Dependency Inversion Principle)
+echo "Checking for circular dependencies..."
+
+# TypeScript: Madge
+if echo "$LANGUAGES" | grep -q "typescript"; then
+    echo "  -> TypeScript (Madge)..."
+    npm run check:deps || FAILED=1
+fi
+
+# Python: deptry (comprehensive) + pydeps (circular)
+if echo "$LANGUAGES" | grep -q "python"; then
+    echo "  -> Python - Circular dependencies (pydeps)..."
+    npm run check:deps:python || FAILED=1
+    echo "  -> Python - Full dependency health (deptry)..."
+    npm run check:deps:python:full || FAILED=1
+fi
+
+# Java: ArchUnit architecture tests
+if echo "$LANGUAGES" | grep -q "java"; then
+    echo "  -> Java (ArchUnit)..."
+    npm run check:deps:java || FAILED=1
+fi
 
 # 2. Run full test coverage
 echo ""
-echo "📊 Running tests with coverage..."
-npm run test:coverage || FAILED=1
+echo "Running tests with coverage..."
+
+if echo "$LANGUAGES" | grep -q "typescript"; then
+    npm run test:coverage || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "python"; then
+    npm run test:coverage:python || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "java"; then
+    npm run test:coverage:java || FAILED=1
+fi
 
 # 3. Build check
 echo ""
-echo "🏗️  Building project..."
-npm run build || FAILED=1
+echo "Building project..."
+
+if echo "$LANGUAGES" | grep -q "typescript"; then
+    npm run build || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "python"; then
+    echo "Building Python project..."
+    npm run build:python || FAILED=1
+fi
+
+if echo "$LANGUAGES" | grep -q "java"; then
+    npm run build:java || FAILED=1
+fi
 
 # 4. Optional: Deep secret scan (set DEEP_SCAN_ENABLED=true in env)
 if [ "$DEEP_SCAN_ENABLED" = "true" ]; then
     echo ""
-    echo "🔍 Running deep secret scan..."
+    echo "Running deep secret scan..."
     npm run check:secrets:deep || FAILED=1
 fi
 
 if [ $FAILED -ne 0 ]; then
     echo ""
-    echo "❌ Pre-push checks failed!"
+    echo "Pre-push checks failed!"
     exit 1
 fi
 
 echo ""
-echo "✅ All pre-push checks passed!"
+echo "All pre-push checks passed!"
