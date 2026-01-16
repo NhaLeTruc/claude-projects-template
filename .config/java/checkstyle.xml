@@ -15,8 +15,13 @@
         <property name="ignorePattern" value="^package.*|^import.*"/>
     </module>
 
+    <!-- File length check (SRP - matches 500 line limit) -->
+    <module name="FileLength">
+        <property name="max" value="500"/>
+    </module>
+
     <module name="TreeWalker">
-        <!-- Naming Conventions -->
+        <!-- ============ NAMING CONVENTIONS ============ -->
         <module name="ConstantName"/>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
@@ -27,7 +32,7 @@
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
 
-        <!-- Import Checks -->
+        <!-- ============ IMPORT CHECKS ============ -->
         <module name="AvoidStarImport"/>
         <module name="IllegalImport"/>
         <module name="RedundantImport"/>
@@ -38,15 +43,75 @@
             <property name="separated" value="true"/>
         </module>
 
-        <!-- Size Violations -->
+        <!-- ============ SINGLE RESPONSIBILITY PRINCIPLE ============ -->
+        <!-- Method size limit (matches TypeScript max-lines-per-function: 50) -->
         <module name="MethodLength">
             <property name="max" value="50"/>
         </module>
+        <!-- Parameter limit (matches TypeScript/Python max-args: 7) -->
         <module name="ParameterNumber">
             <property name="max" value="7"/>
         </module>
+        <!-- One top-level class per file -->
+        <module name="OuterTypeNumber">
+            <property name="max" value="1"/>
+        </module>
+        <!-- Method count limits (ISP - keep classes focused) -->
+        <module name="MethodCount">
+            <property name="maxTotal" value="30"/>
+            <property name="maxPublic" value="20"/>
+        </module>
+        <!-- Class coupling metrics (SRP/DIP) -->
+        <module name="ClassDataAbstractionCoupling">
+            <property name="max" value="7"/>
+        </module>
+        <module name="ClassFanOutComplexity">
+            <property name="max" value="20"/>
+        </module>
+        <!-- Cyclomatic complexity (matches TypeScript sonarjs/cognitive-complexity: 15) -->
+        <module name="CyclomaticComplexity">
+            <property name="max" value="15"/>
+        </module>
+        <module name="NPathComplexity">
+            <property name="max" value="200"/>
+        </module>
+        <!-- Non-commenting source statements (matches TypeScript max-lines-per-function) -->
+        <module name="JavaNCSS">
+            <property name="methodMaximum" value="50"/>
+            <property name="classMaximum" value="500"/>
+        </module>
+        <!-- Boolean expression complexity -->
+        <module name="BooleanExpressionComplexity">
+            <property name="max" value="5"/>
+        </module>
 
-        <!-- Whitespace -->
+        <!-- ============ OPEN/CLOSED PRINCIPLE ============ -->
+        <!-- Ensure methods designed for extension are properly marked -->
+        <module name="DesignForExtension">
+            <property name="ignoredAnnotations" value="Override, Test, Before, After, BeforeEach, AfterEach, BeforeAll, AfterAll"/>
+        </module>
+        <!-- Ensure @Override is used when overriding methods -->
+        <module name="MissingOverride"/>
+
+        <!-- ============ LISKOV SUBSTITUTION PRINCIPLE ============ -->
+        <!-- Ensure clone() calls super.clone() -->
+        <module name="SuperClone"/>
+        <!-- Ensure finalize() calls super.finalize() -->
+        <module name="SuperFinalize"/>
+        <!-- Ensure equals() is covariant -->
+        <module name="CovariantEquals"/>
+
+        <!-- ============ INTERFACE SEGREGATION PRINCIPLE ============ -->
+        <!-- Interfaces should define behavior, not just constants -->
+        <module name="InterfaceIsType"/>
+
+        <!-- ============ DEPENDENCY INVERSION PRINCIPLE ============ -->
+        <!-- Note: Full DIP enforcement requires ArchUnit (see ArchitectureTest.java) -->
+        <!-- Utility classes should not be instantiated -->
+        <module name="FinalClass"/>
+        <module name="HideUtilityClassConstructor"/>
+
+        <!-- ============ WHITESPACE ============ -->
         <module name="EmptyForIteratorPad"/>
         <module name="GenericWhitespace"/>
         <module name="MethodParamPad"/>
@@ -58,18 +123,18 @@
         <module name="WhitespaceAfter"/>
         <module name="WhitespaceAround"/>
 
-        <!-- Modifiers -->
+        <!-- ============ MODIFIERS ============ -->
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>
 
-        <!-- Blocks -->
+        <!-- ============ BLOCKS ============ -->
         <module name="AvoidNestedBlocks"/>
         <module name="EmptyBlock"/>
         <module name="LeftCurly"/>
         <module name="NeedBraces"/>
         <module name="RightCurly"/>
 
-        <!-- Coding -->
+        <!-- ============ CODING ============ -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
         <module name="HiddenField">
@@ -81,21 +146,22 @@
         <module name="MissingSwitchDefault"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
-
-        <!-- SOLID Principles -->
-        <module name="CyclomaticComplexity">
-            <property name="max" value="15"/>
+        <module name="MultipleVariableDeclarations"/>
+        <module name="OneStatementPerLine"/>
+        <module name="PackageDeclaration"/>
+        <!-- Return count limit (SRP - single exit point preferred) -->
+        <module name="ReturnCount">
+            <property name="max" value="6"/>
         </module>
-        <module name="NPathComplexity">
-            <property name="max" value="200"/>
-        </module>
 
-        <!-- Class Design -->
-        <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
-        <module name="InterfaceIsType"/>
+        <!-- ============ CLASS DESIGN ============ -->
         <module name="VisibilityModifier">
             <property name="protectedAllowed" value="true"/>
+            <property name="allowPublicFinalFields" value="true"/>
+        </module>
+        <!-- Exception count limit -->
+        <module name="ThrowsCount">
+            <property name="max" value="4"/>
         </module>
     </module>
 </module>
